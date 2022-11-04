@@ -2,7 +2,6 @@ name: Build and push the tagged build to ACR
 
 on:
   push:
-    branches: [ main ]
     tags:
       - 'v*'
 
