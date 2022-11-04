@@ -1,5 +1,5 @@
 # FROM：基底映像檔
-FROM python:3.7.2-stretch
+FROM ubuntu-20.04
 
 # WORKDI：建立 working directory
 WORKDIR /app
