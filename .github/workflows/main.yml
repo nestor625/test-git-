@@ -2,7 +2,6 @@ name: Build and push the tagged build to production
 
 on:
   push:
-    branches: [main]
     tags:
     - 'v*'
 
