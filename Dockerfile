@@ -1,5 +1,5 @@
 # FROM：基底映像檔
-FROM ubuntu-latest
+FROM python:3.8-slim-buster
 
 # WORKDI：建立 working directory
 WORKDIR /app
