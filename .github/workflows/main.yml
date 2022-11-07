@@ -22,5 +22,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: nestoracr.azurecr.io/nestortest:latest
+          tags: nestoracr.azurecr.io/nestor:latest
           push: true
