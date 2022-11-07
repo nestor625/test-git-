@@ -5,7 +5,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY: "nestoracr"
-  CONTAINER_NAME: "test-git"
+  CONTAINER_NAME: "test-git${{ github.sha }}"
   RESOURCE_GROUP: "nestor"
   CLUSTER_NAME: "nestor-aks"
   DEPLOYMENT_MANIFEST_PATH: "./kubernetes/templates/deployment.yml"
