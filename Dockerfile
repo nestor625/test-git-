@@ -1,5 +1,5 @@
 # FROM：基底映像檔
-FROM ubuntu:latest
+FROM ubuntu-latest
 
 # WORKDI：建立 working directory
 WORKDIR /app
