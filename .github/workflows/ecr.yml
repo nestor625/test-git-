@@ -9,7 +9,7 @@ jobs:
   build:
     
     name: Build Image
-    runs-on: python:3.8-slim-buster
+    runs-on: ubuntu-20.04
 
    
     steps:
