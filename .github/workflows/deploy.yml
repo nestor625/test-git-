@@ -1,46 +1,45 @@
-name: Deploy to AKS Cluster
+name: Build and deploy an app to AKS
+
 on:
-  pull_request:
-    branches:
-    - master
+  workflow_dispatch:
+
+env:
+  AZURE_CONTAINER_REGISTRY: "nestoracr"
+  CONTAINER_NAME: "test-git"
+  RESOURCE_GROUP: "nestor"
+  CLUSTER_NAME: "nestor-aks"
+  DEPLOYMENT_MANIFEST_PATH: "./kubernetes/templates/deployment.yml"
 
 jobs:
-  build:
+  deploy:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
+#     needs: [buildImage]
     steps:
-    - uses: actions/checkout@master
+      # Checks out the repository this file is in
+      - uses: actions/checkout@v3
 
-    - uses: Azure/docker-login@v1
-      with:
-        login-server: nestoracr.azurecr.io
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - run: |
-        docker build . -t nestoracr.azurecr.io/nestortest:${{ github.sha }}
-        docker push nestoracr.azurecr.io/nestortest:${{ github.sha }}
+      # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
 
-    # Set the target AKS cluster.
-    - uses: Azure/aks-set-context@v1
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
-        cluster-name: nestor-aks
-        resource-group: nestor
-
-    - uses: Azure/k8s-create-secret@v1
-      with:
-        container-registry-url: nestoracr.azurecr.io
-        container-registry-username: ${{ secrets.ACR_USERNAME }}
-        container-registry-password: ${{ secrets.ACR_PASSWORD }}
-        secret-name: k8s-secret
-
-    - uses: Azure/k8s-deploy@v1
-      with:
-        manifests: |
-          manifests/deployment.yaml
-          manifests/service.yaml
-        images: |
-          nestoracr.azurecr.io/k8sflask:${{ github.sha }}
-        imagepullsecrets: |
-          k8s-secret
-v
+      # Deploys application based on given manifest file
+      - name: Deploys application
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
+          images: |
+            ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:lastest
