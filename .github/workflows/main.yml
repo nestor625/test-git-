@@ -14,13 +14,13 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v1
         with:
-          registry: ${{ secrets.ACR_NAME }}
-          username: ${{ secrets.ACR_LOGIN }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          registry: nestoracr.azurecr.io
+          username: nestoracr
+          password: r=6Fvd56pKi7ouaDoXukvTO7yN4=T7aQ
 
       - name: Build and push staging images
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: ${{secrets.ACR_NAME}}/nestortest:latest
+          tags: nestoracr.azurecr.io/nestortest:latest
           push: true
