@@ -13,26 +13,23 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Azure Kubernetes set context
-      uses: Azure/aks-set-context@v1
+     #Set Kubernetes context (Azure AKS)
+     - uses: azure/aks-set-context@v1
       with:
-        # Azure credentials i.e. output of `az ad sp create-for-rbac --sdk-auth`
-        creds: '${{secrets.AZURE_CREDENTIALS}}'
-        # Resource Group Name
-        resource-group: nestor
-        # AKS Cluster Name
-        cluster-name: nestor-aks
-        
-      # Deploy to k8s cluster
-    - name: Deploy to Kubernetes cluster
-      uses: Azure/k8s-deploy@v1
-      with:        
-        # Path to the manifest files which will be used for deployment.
+        creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
+        resource-group: 'nestor'
+        cluster-name: 'nestor-aks'
+      id: login
+
+    # Deploy to Azure AKS using kubernetes
+    - uses: Azure/k8s-deploy@v1
+      with:
+        namespace: default
+       #Specify what manifest file or files to use
         manifests: |
           .k8s/test.yml
-        # Fully qualified resource URL of the image(s) to be used for substitutions on the manifest files Example: contosodemo.azurecr.io/helloworld:test
-        images: 'nestoracr.azurecr.io/nestor:${{github.sha}}'
-        # Name of a docker-registry secret that has already been set up within the cluster. Each of these secret names are added under imagePullSecrets field for the workloads found in the input manifest files
-        #imagepullsecrets: docker-image-pull-secret
-        # deploy/promote/reject
-        action: deploy
+        #This will replace any image in manifest files with this 
+        #specific version
+        images: |
+          nestoracr.azurecr.io/nestor:74db03c46674a6bcbb2d2357f6e36c228fb20c03
+
