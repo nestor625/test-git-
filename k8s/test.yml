@@ -13,7 +13,7 @@ spec:
         app: nestor
     spec:
       containers:
-      - image: nestoracr.azurecr.io/nestor:nestor:ccbea10292b3c81a343fe2db81640d6bf0d3095c
+      - image: nestoracr.azurecr.io/nestor:ccbea10292b3c81a343fe2db81640d6bf0d3095c
         name: nestor
         env:
         - name: test
