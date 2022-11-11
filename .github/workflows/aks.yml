@@ -1,4 +1,4 @@
-name: cd aks
+name: cd aks 1
 
 on:
   push:
