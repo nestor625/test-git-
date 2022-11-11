@@ -25,5 +25,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: nestoracr.azurecr.io/nestor:uat,${{ github.sha }}
+          tags: nestoracr.azurecr.io/nestor:uat${{ github.sha }}
           push: true
