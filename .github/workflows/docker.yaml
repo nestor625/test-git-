@@ -5,7 +5,7 @@ on:
     tags: ["*.*.*"]
 
 env:
-  IMAGE_NAME: nginx
+  IMAGE_NAME: nginx-pw
 
 jobs:
   build:
